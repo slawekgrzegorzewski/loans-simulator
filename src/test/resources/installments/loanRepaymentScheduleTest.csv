@@ -1,0 +1,110 @@
+label;index;capital at the start of period;capital;overpayment;interest
+
+declining, monthly, no overpayments;0;1000000.00;166666.67;0.00;8333.33
+declining, monthly, no overpayments;1;833333.33;166666.67;0.00;6944.44
+declining, monthly, no overpayments;2;666666.66;166666.67;0.00;5555.56
+declining, monthly, no overpayments;3;499999.99;166666.67;0.00;4166.67
+declining, monthly, no overpayments;4;333333.32;166666.67;0.00;2777.78
+declining, monthly, no overpayments;5;166666.65;166666.65;0.00;1388.89
+
+declining, monthly, overpayments;0;1000000.00;166666.67;0.00;8333.33
+declining, monthly, overpayments;1;833333.33;166666.67;1000.00;6944.44
+declining, monthly, overpayments;2;665666.66;166416.66;0.00;5547.22
+declining, monthly, overpayments;3;499250.00;166416.66;3000.00;4160.42
+declining, monthly, overpayments;4;329833.34;164916.67;0.00;2748.61
+declining, monthly, overpayments;5;164916.67;164916.67;0.00;1374.31
+
+declining, monthly, overpayments early finish;0;1000000.00;166666.67;0.00;8333.33
+declining, monthly, overpayments early finish;1;833333.33;166666.67;1000.00;6944.44
+declining, monthly, overpayments early finish;2;665666.66;166416.66;450000.00;5547.22
+declining, monthly, overpayments early finish;3;49250.00;16416.67;32833.33;410.42
+
+declining, quarterly, no overpayments;0;1000000.00;166666.67;0.00;25000.00
+declining, quarterly, no overpayments;1;833333.33;166666.67;0.00;20833.33
+declining, quarterly, no overpayments;2;666666.66;166666.67;0.00;16666.67
+declining, quarterly, no overpayments;3;499999.99;166666.67;0.00;12500.00
+declining, quarterly, no overpayments;4;333333.32;166666.67;0.00;8333.33
+declining, quarterly, no overpayments;5;166666.65;166666.65;0.00;4166.67
+
+declining, quarterly, overpayments;0;1000000.00;166666.67;0.00;25000.00
+declining, quarterly, overpayments;1;833333.33;166666.67;1000.00;20833.33
+declining, quarterly, overpayments;2;665666.66;166416.66;0.00;16641.67
+declining, quarterly, overpayments;3;499250.00;166416.66;3000.00;12481.25
+declining, quarterly, overpayments;4;329833.34;164916.67;0.00;8245.83
+declining, quarterly, overpayments;5;164916.67;164916.67;0.00;4122.92
+
+declining, quarterly, overpayments early finish;0;1000000.00;166666.67;0.00;25000.00
+declining, quarterly, overpayments early finish;1;833333.33;166666.67;1000.00;20833.33
+declining, quarterly, overpayments early finish;2;665666.66;166416.66;499250.00;16641.67
+
+declining, yearly, no overpayments;0;1000000.00;166666.67;0.00;100000.00
+declining, yearly, no overpayments;1;833333.33;166666.67;0.00;83333.33
+declining, yearly, no overpayments;2;666666.66;166666.67;0.00;66666.67
+declining, yearly, no overpayments;3;499999.99;166666.67;0.00;50000.00
+declining, yearly, no overpayments;4;333333.32;166666.67;0.00;33333.33
+declining, yearly, no overpayments;5;166666.65;166666.65;0.00;16666.66
+
+declining, yearly, overpayments;0;1000000.00;166666.67;0.00;100000.00
+declining, yearly, overpayments;1;833333.33;166666.67;1000.00;83333.33
+declining, yearly, overpayments;2;665666.66;166416.66;0.00;66566.67
+declining, yearly, overpayments;3;499250.00;166416.66;3000.00;49925.00
+declining, yearly, overpayments;4;329833.34;164916.67;0.00;32983.33
+declining, yearly, overpayments;5;164916.67;164916.67;0.00;16491.67
+
+declining, yearly, overpayments early finish;0;1000000.00;166666.67;0.00;100000.00
+declining, yearly, overpayments early finish;1;833333.33;166666.67;1000.00;83333.33
+declining, yearly, overpayments early finish;2;665666.66;166416.66;499250.00;66566.67
+
+fixed, monthly, no overpayments;0;1000000.00;163228.06;0.00;8333.33
+fixed, monthly, no overpayments;1;836771.94;164588.29;0.00;6973.10
+fixed, monthly, no overpayments;2;672183.65;165959.86;0.00;5601.53
+fixed, monthly, no overpayments;3;506223.79;167342.86;0.00;4218.53
+fixed, monthly, no overpayments;4;338880.93;168737.38;0.00;2824.01
+fixed, monthly, no overpayments;5;170143.55;170143.55;0.00;1417.86
+
+fixed, monthly, overpayments;0;1000000.00;163228.06;0.00;8333.33
+fixed, monthly, overpayments;1;836771.94;164588.29;1000.00;6973.10
+fixed, monthly, overpayments;2;671183.65;165712.97;0.00;5593.20
+fixed, monthly, overpayments;3;505470.68;167093.91;3000.00;4212.26
+fixed, monthly, overpayments;4;335376.77;166992.58;0.00;2794.81
+fixed, monthly, overpayments;5;168384.19;168384.19;0.00;1403.20
+
+fixed, monthly, overpayments early finish;0;1000000.00;163228.06;0.00;8333.33
+fixed, monthly, overpayments early finish;1;836771.94;164588.29;1000.00;6973.10
+fixed, monthly, overpayments early finish;2;671183.65;165712.97;505470.68;5593.20
+
+fixed, quarterly, no overpayments;0;1000000.00;156549.97;0.00;25000.00
+fixed, quarterly, no overpayments;1;843450.03;160463.72;0.00;21086.25
+fixed, quarterly, no overpayments;2;682986.31;164475.31;0.00;17074.66
+fixed, quarterly, no overpayments;3;518511.00;168587.19;0.00;12962.78
+fixed, quarterly, no overpayments;4;349923.81;172801.87;0.00;8748.10
+fixed, quarterly, no overpayments;5;177121.94;177121.94;0.00;4428.05
+
+fixed, quarterly, overpayments;0;1000000.00;156549.97;0.00;25000.00
+fixed, quarterly, overpayments;1;843450.03;160463.72;1000.00;21086.25
+fixed, quarterly, overpayments;2;681986.31;164234.49;0.00;17049.66
+fixed, quarterly, overpayments;3;517751.82;168340.35;3000.00;12943.80
+fixed, quarterly, overpayments;4;346411.47;171067.39;0.00;8660.29
+fixed, quarterly, overpayments;5;175344.08;175344.08;0.00;4383.60
+
+fixed, quarterly, overpayments early finish;0;1000000.00;156549.97;0.00;25000.00
+fixed, quarterly, overpayments early finish;1;843450.03;160463.72;1000.00;21086.25
+fixed, quarterly, overpayments early finish;2;681986.31;164234.49;517751.82;17049.66
+
+fixed, yearly, no overpayments;0;1000000.00;129607.38;0.00;100000.00
+fixed, yearly, no overpayments;1;870392.62;142568.12;0.00;87039.26
+fixed, yearly, no overpayments;2;727824.50;156824.93;0.00;72782.45
+fixed, yearly, no overpayments;3;570999.57;172507.42;0.00;57099.96
+fixed, yearly, no overpayments;4;398492.15;189758.16;0.00;39849.22
+fixed, yearly, no overpayments;5;208733.99;208733.99;0.00;20873.40
+
+fixed, yearly, overpayments;0;1000000.00;129607.38;0.00;100000.00
+fixed, yearly, overpayments;1;870392.62;142568.12;1000.00;87039.26
+fixed, yearly, overpayments;2;726824.50;156609.46;0.00;72682.45
+fixed, yearly, overpayments;3;570215.04;172270.41;3000.00;57021.50
+fixed, yearly, overpayments;4;394944.63;188068.87;0.00;39494.46
+fixed, yearly, overpayments;5;206875.76;206875.76;0.00;20687.58
+
+fixed, yearly, overpayments early finish;0;1000000.00;129607.38;0.00;100000.00
+fixed, yearly, overpayments early finish;1;870392.62;142568.12;1000.00;87039.26
+fixed, yearly, overpayments early finish;2;726824.50;156609.46;570215.04;72682.45

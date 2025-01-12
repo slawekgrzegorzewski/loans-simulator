@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  loans-db:
+    image: postgres:17.2
+    ports:
+      - "5432:5432"
+    container_name: loans-db
+    environment:
+      POSTGRES_PASSWORD: slawek

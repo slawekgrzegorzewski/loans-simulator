@@ -1,0 +1,63 @@
+scalar BigDecimal
+scalar LocalDate
+scalar Money
+scalar UUID
+
+type Query {
+    loans: [Loan!]!
+    regularSimulation(input: LoanSimulationInput): LoanSimulationResult
+}
+
+type Mutation {
+    createLoan(input: LoanCreationInput): LoanCreationResult
+}
+
+input LoanSimulationInput {
+    id: UUID!
+}
+
+type Installment {
+    installmentIndex: Int!
+    remainingCapitalAtPeriodStart: BigDecimal!
+    periodStart: LocalDate!
+    periodEnd: LocalDate!
+    amount: BigDecimal!
+    capital: BigDecimal!
+    overpayment: BigDecimal!
+    interest: BigDecimal!
+}
+
+type LoanSimulationResult {
+    installments: [Installment!]!
+}
+
+input LoanCreationInput {
+    start: LocalDate!
+    amount: Money!
+    rate: BigDecimal!
+    numberOfInstallments: Int!
+    installmentType: InstallmentType!
+    installmentFrequency: InstallmentFrequency!
+}
+
+type LoanCreationResult {
+    id: UUID!
+}
+
+enum InstallmentType{
+    FIXED, DECLINING
+}
+
+enum InstallmentFrequency {
+    MONTHLY, QUARTERLY, YEARLY
+}
+
+type Loan {
+    id: UUID!
+    start: LocalDate!
+    amount: Money!
+    rate: BigDecimal!
+    numberOfInstallments: Int!
+    installmentType: InstallmentType!
+    installmentFrequency: InstallmentFrequency!
+}

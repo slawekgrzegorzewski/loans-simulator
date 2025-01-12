@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: loans-simulator
+  datasource:
+    url: jdbc:postgresql://localhost:5432/loans
+    username: postgres
+    password: slawek
+  jpa:
+    hibernate:
+      ddl-auto: update
