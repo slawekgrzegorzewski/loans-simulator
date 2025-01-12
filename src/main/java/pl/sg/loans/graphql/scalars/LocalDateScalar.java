@@ -21,7 +21,7 @@ public class LocalDateScalar implements Coercing<LocalDate, String> {
         if (dataFetcherResult instanceof LocalDate) {
             return dataFetcherResult.toString();
         } else {
-            throw new CoercingSerializeException("Not a valid DateTime");
+            throw new CoercingSerializeException("Not a valid LocalDate");
         }
     }
 
@@ -36,7 +36,7 @@ public class LocalDateScalar implements Coercing<LocalDate, String> {
             return LocalDate.parse(((StringValue) input).getValue());
         }
 
-        throw new CoercingParseLiteralException("Value is not a valid ISO date time");
+        throw new CoercingParseLiteralException("Value is not a valid LocalDate");
     }
 
     @Override

@@ -21,7 +21,7 @@ public class UUIDScalar implements Coercing<UUID, String> {
         if (dataFetcherResult instanceof UUID) {
             return dataFetcherResult.toString();
         } else {
-            throw new CoercingSerializeException("Not a valid DateTime");
+            throw new CoercingSerializeException("Not a valid UUID");
         }
     }
 
@@ -36,7 +36,7 @@ public class UUIDScalar implements Coercing<UUID, String> {
             return UUID.fromString(((StringValue) input).getValue());
         }
 
-        throw new CoercingParseLiteralException("Value is not a valid ISO date time");
+        throw new CoercingParseLiteralException("Value is not a valid UUID");
     }
 
     @Override

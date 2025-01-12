@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import pl.sg.loans.model.*;
+import pl.sg.loans.simulator.overpayment.CustomOverpayment;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -60,9 +61,9 @@ class LoanRepaymentSimulatorTest {
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("testData")
-    void testSimulation(String label, Loan loan, Map<InstallmentIndex, Money> overpayments) throws URISyntaxException, IOException {
+    void testSimulation(String label, Loan loan, Map<InstallmentIndex, Money> overpayments) {
         LoanRepaymentSimulator loanRepaymentSimulator = new LoanRepaymentSimulator();
-        List<Installment> installments = loanRepaymentSimulator.simulateRepayment(loan, overpayments, LOAN_RATE);
+        List<Installment> installments = loanRepaymentSimulator.simulate(loan, new CustomOverpayment(overpayments), LOAN_RATE);
         Assertions.assertEquals(expectedInstallments.get(label), installments);
         Assertions.assertEquals(
                 LOAN_AMOUNT,

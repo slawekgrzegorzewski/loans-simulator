@@ -5,15 +5,32 @@ scalar UUID
 
 type Query {
     loans: [Loan!]!
-    regularSimulation(input: LoanSimulationInput): LoanSimulationResult
+    regularSimulation(input: SimpleLoanSimulationInput!): LoanSimulationResult
+    constantBudgetSimulation(input: ConstantBudgetLoanSimulationInput!): LoanSimulationResult
+    customOverpaymentSimulation(input: CustomOverpaymentLoanSimulationInput!): LoanSimulationResult
 }
 
 type Mutation {
-    createLoan(input: LoanCreationInput): LoanCreationResult
+    createLoan(input: LoanCreationInput!): LoanCreationResult
 }
 
-input LoanSimulationInput {
-    id: UUID!
+input SimpleLoanSimulationInput {
+    loanId: UUID!
+}
+
+input ConstantBudgetLoanSimulationInput {
+    loanId: UUID!
+    constantBudget: BigDecimal!
+}
+
+input CustomOverpaymentLoanSimulationInput {
+    loanId: UUID!
+    overpaymentsSchedule: [OverpaymentPerInstallment!]!
+}
+
+input OverpaymentPerInstallment {
+    installmentIndex: Int!
+    overpayment: BigDecimal!
 }
 
 type Installment {

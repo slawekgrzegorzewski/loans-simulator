@@ -5,23 +5,32 @@ import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
 import com.netflix.graphql.dgs.exceptions.DgsEntityNotFoundException;
-import org.jetbrains.annotations.NotNull;
+import org.joda.money.Money;
 import pl.sg.graphql.schema.types.*;
+import pl.sg.loans.components.LoanMapper;
 import pl.sg.loans.components.LoansService;
-import pl.sg.loans.model.InstallmentFrequency;
-import pl.sg.loans.model.InstallmentType;
+import pl.sg.loans.model.InstallmentIndex;
 import pl.sg.loans.simulator.LoanRepaymentSimulator;
+import pl.sg.loans.simulator.OverpaymentProvider;
+import pl.sg.loans.simulator.overpayment.ConstantBudgetOverpayment;
+import pl.sg.loans.simulator.overpayment.CustomOverpayment;
+import pl.sg.loans.simulator.overpayment.NoOverpayment;
 
+import java.math.RoundingMode;
 import java.util.List;
-import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @DgsComponent
 public class LoansDataFetcher {
 
+    private final LoanMapper loanMapper;
     private final LoanRepaymentSimulator loanRepaymentSimulator;
     private final LoansService loansService;
 
-    public LoansDataFetcher(LoanRepaymentSimulator loanRepaymentSimulator, LoansService loansService) {
+    public LoansDataFetcher(LoanMapper loanMapper, LoanRepaymentSimulator loanRepaymentSimulator, LoansService loansService) {
+        this.loanMapper = loanMapper;
         this.loanRepaymentSimulator = loanRepaymentSimulator;
         this.loansService = loansService;
     }
@@ -29,16 +38,45 @@ public class LoansDataFetcher {
     @DgsQuery
     public List<Loan> loans() {
         return loansService.getLoans().stream()
-                .map(this::map)
+                .map(loanMapper::fromEntityToGraphqlModel)
                 .toList();
     }
 
     @DgsQuery
-    public LoanSimulationResult regularSimulation(@InputArgument LoanSimulationInput input) {
-        pl.sg.loans.entities.Loan loan = loansService.find(input.getId()).orElseThrow(DgsEntityNotFoundException::new);
-        List<Installment> installments = loanRepaymentSimulator.simulateRepayment(mapToModel(loan), Map.of(), loan.getRate())
+    public LoanSimulationResult regularSimulation(@InputArgument SimpleLoanSimulationInput input) {
+        return simulate(
+                input.getLoanId(),
+                _ -> new NoOverpayment());
+    }
+
+    @DgsQuery
+    public LoanSimulationResult constantBudgetSimulation(@InputArgument ConstantBudgetLoanSimulationInput input) {
+        return simulate(
+                input.getLoanId(),
+                loan -> new ConstantBudgetOverpayment(Money.of(loan.getAmount().getCurrencyUnit(), input.getConstantBudget(), RoundingMode.HALF_EVEN)));
+    }
+
+    @DgsQuery
+    public LoanSimulationResult customOverpaymentSimulation(@InputArgument CustomOverpaymentLoanSimulationInput input) {
+        return simulate(
+                input.getLoanId(),
+                loan -> new CustomOverpayment(
+                        input.getOverpaymentsSchedule()
+                                .stream()
+                                .collect(Collectors.toMap(
+                                        overpaymentPerInstallment -> InstallmentIndex.of(overpaymentPerInstallment.getInstallmentIndex()),
+                                        overpaymentPerInstallment -> Money.of(loan.getAmount().getCurrencyUnit(), overpaymentPerInstallment.getOverpayment(), RoundingMode.HALF_EVEN)
+                                ))));
+    }
+
+    private LoanSimulationResult simulate(UUID loanId, Function<pl.sg.loans.entities.Loan, OverpaymentProvider> overpaymentProvider) {
+        pl.sg.loans.entities.Loan loan = loansService.find(loanId).orElseThrow(DgsEntityNotFoundException::new);
+        List<Installment> installments = loanRepaymentSimulator.simulate(
+                        loanMapper.fromEntityToModel(loan),
+                        overpaymentProvider.apply(loan),
+                        loan.getRate())
                 .stream()
-                .map(installment -> map(loan, installment))
+                .map(installment -> loanMapper.fromEntityToGraphqlModel(installment, loan.getStart(), loan.getInstallmentFrequency()))
                 .toList();
         return LoanSimulationResult.newBuilder().installments(installments).build();
     }
@@ -52,74 +90,9 @@ public class LoansDataFetcher {
                                 input.getAmount(),
                                 input.getRate(),
                                 input.getNumberOfInstallments(),
-                                map(input.getInstallmentType()),
-                                map(input.getInstallmentFrequency())
+                                loanMapper.fromGraphqlModelToModel(input.getInstallmentType()),
+                                loanMapper.fromGraphqlModelToModel(input.getInstallmentFrequency())
                         ).getPublicId()
                 ).build();
-    }
-
-    private Loan map(pl.sg.loans.entities.Loan loan) {
-        return Loan.newBuilder()
-                .id(loan.getPublicId())
-                .start(loan.getStart())
-                .amount(loan.getAmount())
-                .rate(loan.getRate())
-                .numberOfInstallments(loan.getNumberOfInstallments())
-                .installmentType(map(loan.getInstallmentType()))
-                .installmentFrequency(map(loan.getInstallmentFrequency()))
-                .build();
-    }
-
-    private pl.sg.loans.model.Loan mapToModel(pl.sg.loans.entities.Loan loan) {
-        return new pl.sg.loans.model.Loan(
-                loan.getStart(),
-                loan.getAmount(),
-                loan.getNumberOfInstallments(),
-                loan.getInstallmentType(),
-                loan.getInstallmentFrequency()
-        );
-    }
-
-    private Installment map(pl.sg.loans.entities.Loan loan, pl.sg.loans.model.Installment installment) {
-        return Installment.newBuilder()
-                .installmentIndex(installment.installmentIndex().index())
-                .amount(installment.installment())
-                .periodStart(installment.periodStart(loan.getStart(), loan.getInstallmentFrequency()))
-                .periodEnd(installment.periodEnd(loan.getStart(), loan.getInstallmentFrequency()))
-                .remainingCapitalAtPeriodStart(installment.remainingCapitalAtPeriodStart())
-                .capital(installment.capital())
-                .overpayment(installment.overpayment())
-                .interest(installment.interest())
-                .build();
-    }
-
-    private InstallmentType map(pl.sg.graphql.schema.types.InstallmentType installmentType) {
-        return switch (installmentType) {
-            case DECLINING -> InstallmentType.DECLINING;
-            case FIXED -> InstallmentType.FIXED;
-        };
-    }
-
-    private pl.sg.graphql.schema.types.InstallmentType map(InstallmentType installmentType) {
-        return switch (installmentType) {
-            case DECLINING -> pl.sg.graphql.schema.types.InstallmentType.DECLINING;
-            case FIXED -> pl.sg.graphql.schema.types.InstallmentType.FIXED;
-        };
-    }
-
-    private InstallmentFrequency map(pl.sg.graphql.schema.types.InstallmentFrequency installmentFrequency) {
-        return switch (installmentFrequency) {
-            case YEARLY -> InstallmentFrequency.YEARLY;
-            case QUARTERLY -> InstallmentFrequency.QUARTERLY;
-            case MONTHLY -> InstallmentFrequency.MONTHLY;
-        };
-    }
-
-    private pl.sg.graphql.schema.types.InstallmentFrequency map(InstallmentFrequency installmentFrequency) {
-        return switch (installmentFrequency) {
-            case YEARLY -> pl.sg.graphql.schema.types.InstallmentFrequency.YEARLY;
-            case QUARTERLY -> pl.sg.graphql.schema.types.InstallmentFrequency.QUARTERLY;
-            case MONTHLY -> pl.sg.graphql.schema.types.InstallmentFrequency.MONTHLY;
-        };
     }
 }

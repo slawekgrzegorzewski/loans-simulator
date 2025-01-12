@@ -21,7 +21,7 @@ public class BigDecimalScalar implements Coercing<BigDecimal, String> {
         if (dataFetcherResult instanceof BigDecimal) {
             return dataFetcherResult.toString();
         } else {
-            throw new CoercingSerializeException("Not a valid DateTime");
+            throw new CoercingSerializeException("Not a valid BigDecimal");
         }
     }
 
@@ -36,7 +36,7 @@ public class BigDecimalScalar implements Coercing<BigDecimal, String> {
             return new BigDecimal(((StringValue) input).getValue());
         }
 
-        throw new CoercingParseLiteralException("Value is not a valid ISO date time");
+        throw new CoercingParseLiteralException("Value is not a valid BigDecimal");
     }
 
     @Override

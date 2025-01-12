@@ -2,7 +2,6 @@ package pl.sg.loans.entities;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.CompositeType;
-import org.hibernate.annotations.RowId;
 import org.joda.money.Money;
 import pl.sg.loans.database.MoneyType;
 import pl.sg.loans.model.InstallmentFrequency;

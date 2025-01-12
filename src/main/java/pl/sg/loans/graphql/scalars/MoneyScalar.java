@@ -21,7 +21,7 @@ public class MoneyScalar implements Coercing<Money, String> {
         if (dataFetcherResult instanceof Money) {
             return dataFetcherResult.toString();
         } else {
-            throw new CoercingSerializeException("Not a valid DateTime");
+            throw new CoercingSerializeException("Not a valid Money");
         }
     }
 
@@ -36,7 +36,7 @@ public class MoneyScalar implements Coercing<Money, String> {
             return Money.parse(((StringValue) input).getValue());
         }
 
-        throw new CoercingParseLiteralException("Value is not a valid ISO date time");
+        throw new CoercingParseLiteralException("Value is not a valid Money");
     }
 
     @Override
